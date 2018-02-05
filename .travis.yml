@@ -1,0 +1,26 @@
+language: php
+
+php:
+  - 7.2
+
+notifications:
+  email: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_install:
+  - composer self-update
+  - composer --version
+
+  # turn off XDebug
+  - phpenv config-rm xdebug.ini || return
+
+install:
+  - composer install
+
+script:
+  # Check if the code standards weren't broken.
+  # Run it only on PHP 7.2 which should be the fastest. No need to run it for all PHP versions
+- if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.2" ]]; then bin/php-cs-fixer fix -v --dry-run --diff; fi
