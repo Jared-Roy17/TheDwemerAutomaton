@@ -65,9 +65,9 @@ class RedditHelper
 
         if (!empty($response->jquery[10][3][0])) {
             return $response->jquery[10][3][0];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**

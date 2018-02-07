@@ -4,6 +4,7 @@ namespace App\Builders;
 
 use App\RedditPost;
 use App\Set;
+use App\Singleton\PostTypes;
 use App\Singleton\WeekDayPost;
 
 /**
@@ -16,7 +17,7 @@ class SetPostBuilder
 {
     const TITLE_PREFIX = '[Daily] Set Discussion: ';
 
-    public function build(Set $set): RedditPost
+    public static function build(Set $set): RedditPost
     {
         $title = self::TITLE_PREFIX.$set->nameEN;
 
@@ -61,6 +62,6 @@ class SetPostBuilder
         $text .= '\n &nbsp; \n\n';
         $text .= 'Information about this set was provided by [ElderScrollsBote](https://www.elderscrollsbote.de/).'.WeekDayPost::SIGNATURE;
 
-        return new RedditPost($title, $text);
+        return new RedditPost($title, $text, PostTypes::DAILY_SET_POST);
     }
 }
