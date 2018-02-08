@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Set extends Model
 {
+    protected $table = 'sets_new';
+
     public function hasJewelry(): bool
     {
         return 1 === $this->hasJewelry;

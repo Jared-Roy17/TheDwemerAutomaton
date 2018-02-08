@@ -13,6 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        'App\Console\Commands\PostDailyThreadsCommand',
+        'App\Console\Commands\CheckModMailCommand',
     ];
 
     /**

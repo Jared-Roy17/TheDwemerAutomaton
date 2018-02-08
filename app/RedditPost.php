@@ -8,8 +8,11 @@
 
 namespace App;
 
+use App\Builders\ModNotificationBuilder;
 use App\Builders\SetPostBuilder;
 use App\Helpers\RedditHelper;
+use App\Notifications\DiscordNotification;
+use App\Notifications\SlackNotification;
 use App\Singleton\PostTypes;
 use Illuminate\Support\Facades\DB;
 
@@ -19,6 +22,7 @@ class RedditPost
     private $text;
     private $type;
     private $post_id;
+    private $url;
 
     /**
      * RedditPost constructor.
@@ -44,12 +48,27 @@ class RedditPost
         $split    = explode('/', str_replace('https://www.reddit.com/r/'.env('SUBREDDIT').'/comments/', '', $response), 2);
 
         $this->post_id = $split[0];
+        $this->url     = 'https://www.reddit.com/r/'.env('SUBREDDIT').'/comments/'.$this->post_id;
 
         if ($distinguish) {
             $helper->distinguish($this->post_id);
         }
 
         $this->save();
+    }
+
+    public function sendToDiscord()
+    {
+        DiscordNotification::send($this->title, $this->url, env('BOT_SUBREDDIT_DISCORD'));
+    }
+
+    public function notifyModSlack()
+    {
+        if (empty($this->url)) {
+            return;
+        }
+
+        SlackNotification::send(ModNotificationBuilder::build($this->title, $this->url), null, env('BOT_MOD_SLACK'));
     }
 
     private function save()
