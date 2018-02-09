@@ -40,7 +40,7 @@ class PostDailyThreadsCommand extends Command
      */
     public function handle()
     {
-        $atTenAm = new DateTime('today 10:00', new DateTimeZone(env('APP_TIMEZONE')));
+        $atTenAm = new DateTime('today 09:00', new DateTimeZone(env('APP_TIMEZONE')));
         $now     = new DateTime('now', new DateTimeZone(env('APP_TIMEZONE')));
 
         if (($now > $atTenAm)
@@ -63,8 +63,11 @@ class PostDailyThreadsCommand extends Command
                 $post = SetPostBuilder::build($new_set);
 
                 $post->post(true);
-                $post->sendToDiscord();
-                $post->notifyModSlack();
+
+                if (env('APP_NOTIFICATIONS')) {
+                    $post->sendToDiscord();
+                    $post->notifyModSlack();
+                }
             }
 
             if (PostTypes::isEnabled(PostTypes::WEEKDAY_POST_TEXT)
@@ -72,8 +75,11 @@ class PostDailyThreadsCommand extends Command
                 $post = WeekDayPostBuilder::build(date('l'));
 
                 $post->post(true);
-                $post->sendToDiscord();
-                $post->notifyModSlack();
+
+                if (env('APP_NOTIFICATIONS')) {
+                    $post->sendToDiscord();
+                    $post->notifyModSlack();
+                }
             }
         }
 

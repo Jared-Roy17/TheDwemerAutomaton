@@ -17,11 +17,18 @@ class SetPostBuilder
 {
     const TITLE_PREFIX = '[Daily] Set Discussion: ';
 
+    /**
+     * Builds a RedditPost from a Set.
+     *
+     * @param Set $set
+     *
+     * @return RedditPost
+     */
     public static function build(Set $set): RedditPost
     {
         $title = self::TITLE_PREFIX.$set->nameEN;
 
-        $text = '**'.$set->nameEN.'**\n\n';
+        $text = '**'.$set->nameEN.'**'.PHP_EOL.PHP_EOL;
 
         $types = [];
 
@@ -41,25 +48,25 @@ class SetPostBuilder
             $types[] = 'Heavy Armor';
         }
 
-        $text .= '*Obtainable as: '.implode(', ', $types).'*\n\n';
-        $text .= '*Type: '.$set->type.'*\n\n';
+        $text .= '*Obtainable as: '.implode(', ', $types).'*'.PHP_EOL.PHP_EOL;
+        $text .= '*Type: '.$set->type.'*'.PHP_EOL.PHP_EOL;
 
         if (!empty($set->locationEN)) {
-            $text .= '*Location: '.str_replace(';', ', ', $set->locationEN).'*\n\n';
+            $text .= '*Location: '.str_replace(';', ', ', $set->locationEN).'*'.PHP_EOL.PHP_EOL;
         }
 
-        $text .= '\n &nbsp; \n\n';
-        $text .= '***Set Bonuses***\n\n';
-        $text .= 'Items | Bonus\n';
-        $text .= '---|---\n';
+        $text .= PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL;
+        $text .= '***Set Bonuses***'.PHP_EOL.PHP_EOL;
+        $text .= 'Items | Bonus'.PHP_EOL;
+        $text .= '---|---'.PHP_EOL;
 
         foreach ($set->getSetBonusses() as $key => $bonus) {
-            $text .= $key.' | '.$bonus.'\n';
+            $text .= $key.' | '.$bonus.PHP_EOL;
         }
 
-        $text .= '\n &nbsp; \n\n';
-        $text .= '*Be sure to think about strengths, weaknesses, counters, and synergies in your discussions. Please vote based on contribution, not opinion.*\n\n';
-        $text .= '\n &nbsp; \n\n';
+        $text .= PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL;
+        $text .= '*Be sure to think about strengths, weaknesses, counters, and synergies in your discussions. Please vote based on contribution, not opinion.*'.PHP_EOL.PHP_EOL;
+        $text .= PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL;
         $text .= 'Information about this set was provided by [ElderScrollsBote](https://www.elderscrollsbote.de/).'.WeekDayPost::SIGNATURE;
 
         return new RedditPost($title, $text, PostTypes::DAILY_SET_POST);

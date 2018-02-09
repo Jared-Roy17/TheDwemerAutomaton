@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\DB;
 
 class ConfigurationController extends Controller
 {
+    /**
+     * Handles slash commands coming in from the moderator Slack channel.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
+     */
     public function slackConfigHook(Request $request)
     {
         if (env('SLACK_COMMAND_TOKEN') !== $request->get('token')) {

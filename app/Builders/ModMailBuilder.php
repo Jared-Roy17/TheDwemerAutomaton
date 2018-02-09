@@ -11,6 +11,8 @@ namespace App\Builders;
 class ModMailBuilder
 {
     /**
+     * Builds a human readable notification from a modmail array.
+     *
      * @param array $modMailData
      *
      * @return string

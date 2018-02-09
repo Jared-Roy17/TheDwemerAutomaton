@@ -39,6 +39,8 @@ class RedditPost
     }
 
     /**
+     * Distinguishes the post if the user has the rights to do so.
+     *
      * @param bool $distinguish
      */
     public function post(bool $distinguish = false)
@@ -57,11 +59,17 @@ class RedditPost
         $this->save();
     }
 
+    /**
+     * Sends a notification of the post to Discord.
+     */
     public function sendToDiscord()
     {
         DiscordNotification::send($this->title, $this->url, env('BOT_SUBREDDIT_DISCORD'));
     }
 
+    /**
+     * Notifies the moderator slack about this post.
+     */
     public function notifyModSlack()
     {
         if (empty($this->url)) {
@@ -71,6 +79,9 @@ class RedditPost
         SlackNotification::send(ModNotificationBuilder::build($this->title, $this->url), null, env('BOT_MOD_SLACK'));
     }
 
+    /**
+     * Saves the post into the database.
+     */
     private function save()
     {
         if (PostTypes::WEEKDAY_POST === $this->type) {
@@ -87,5 +98,15 @@ class RedditPost
                 'set_id'  => $set->id,
             ]);
         }
+
+        $this->print();
+    }
+
+    /**
+     * Prints the post to the console.
+     */
+    private function print()
+    {
+        print_r('Posted and Saved: '.$this->title.PHP_EOL);
     }
 }
