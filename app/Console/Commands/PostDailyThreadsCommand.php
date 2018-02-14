@@ -6,6 +6,7 @@ use App\Builders\SetPostBuilder;
 use App\Builders\WeekDayPostBuilder;
 use App\Set;
 use App\Singleton\PostTypes;
+use App\Singleton\WeekDayPost;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Console\Command;
@@ -62,10 +63,10 @@ class PostDailyThreadsCommand extends Command
                 /** @var Set $new_set */
                 $post = SetPostBuilder::build($new_set);
 
-                $post->post(true);
+                $post->post()->distinguish()->setSticky(1);
 
                 if (env('APP_NOTIFICATIONS')) {
-                    $post->sendToDiscord();
+                    //$post->sendToDiscord();
                     $post->notifyModSlack();
                 }
             }
@@ -74,10 +75,16 @@ class PostDailyThreadsCommand extends Command
                 && !PostTypes::hasTodayBeenPosted(PostTypes::WEEKDAY_POST_TEXT)) {
                 $post = WeekDayPostBuilder::build(date('l'));
 
-                $post->post(true);
+                if ($post->getTitle() === WeekDayPost::FRIDAY['title']) {
+                    $post->post()->distinguish()->enableContestMode()->setSticky(2);
+                } elseif ($post->getTitle() === WeekDayPost::MONDAY['title']) {
+                    $post->post()->distinguish()->setSticky(2)->setSuggestedSort('new');
+                } else {
+                    $post->post()->distinguish()->setSticky(2);
+                }
 
                 if (env('APP_NOTIFICATIONS')) {
-                    $post->sendToDiscord();
+                    //$post->sendToDiscord();
                     $post->notifyModSlack();
                 }
             }

@@ -22,7 +22,7 @@ class RedditHelper
         $username = env('REDDIT_USERNAME');
         $password = env('REDDIT_PASSWORD');
 
-        $urlLogin = "{$this->apiHost}/login/$username";
+        $urlLogin = $this->apiHost.'/login/'.$username;
 
         $postData = sprintf('api_type=json&user=%s&passwd=%s',
             $username,
@@ -40,7 +40,7 @@ class RedditHelper
      */
     public function createStory($title = null, $text = null, $subreddit = null)
     {
-        $urlSubmit = "{$this->apiHost}/submit";
+        $urlSubmit = $this->apiHost.'/submit';
 
         if (empty($title)) {
             echo 'title empty';
@@ -48,17 +48,19 @@ class RedditHelper
 
         $kind = 'self';
 
-        $postData = sprintf('uh=%s&kind=%s&sr=%s&title=%s&r=%s&sendreplies&renderstyle=html',
-            $this->modHash,
-            $kind,
-            $subreddit,
-            urlencode($title),
-            $subreddit,
-            false);
+        $postData = [
+            'uh'          => $this->modHash,
+            'kind'        => $kind,
+            'sr'          => $subreddit,
+            'title'       => $title,
+            'r'           => $subreddit,
+            'renderstyle' => 'html',
+            'sendreplies' => false,
+        ];
 
         //if link was present, add to POST data
         if (null != $text) {
-            $postData .= '&text='.urlencode($text);
+            $postData['text'] = $text;
         }
 
         $response = $this->runCurl($urlSubmit, $postData);
@@ -77,15 +79,129 @@ class RedditHelper
      */
     public function distinguish(string $id)
     {
-        $urlMessages = "{$this->apiHost}/distinguish";
+        $urlMessages = $this->apiHost.'/distinguish';
 
-        $postData = sprintf('uh=%s&api_type=%s&how=%s&id=%s',
-            $this->modHash,
-            'json',
-            'yes',
-            't3_'.$id);
+        $postData = [
+            'uh'       => $this->modHash,
+            'api_type' => 'json',
+            'show'     => 'yes',
+            'id'       => 't3_'.$id,
+        ];
 
         return $this->runCurl($urlMessages, $postData);
+    }
+
+    /**
+     * @param string $id
+     * @param int    $stickySlot
+     */
+    public function setSticky(string $id, int $stickySlot)
+    {
+        $urlMessages = $this->apiHost.'/set_subreddit_sticky';
+
+        $postData = [
+            'uh'         => $this->modHash,
+            'api_type'   => 'json',
+            'id'         => 't3_'.$id,
+            'num'        => $stickySlot,
+            'state'      => true,
+            'to_profile' => false,
+        ];
+
+        $this->runCurl($urlMessages, $postData);
+    }
+
+    /**
+     * @param string $id
+     */
+    public function setContestMode(string $id)
+    {
+        $urlMessages = $this->apiHost.'/set_contest_mode';
+
+        $postData = [
+            'uh'       => $this->modHash,
+            'api_type' => 'json',
+            'id'       => 't3_'.$id,
+            'state'    => true,
+        ];
+
+        $this->runCurl($urlMessages, $postData);
+    }
+
+    /**
+     * @param string $id
+     * @param string $sort
+     */
+    public function setSuggestedSort(string $id, string $sort)
+    {
+        $urlMessages = $this->apiHost.'/set_suggested_sort';
+
+        $postData = [
+            'uh'       => $this->modHash,
+            'api_type' => 'json',
+            'id'       => 't3_'.$id,
+            'sort'     => $sort,
+        ];
+
+        $this->runCurl($urlMessages, $postData);
+    }
+
+    /**
+     * @param string $pageName
+     *
+     * @return mixed
+     */
+    public function getWikiPage(string $pageName)
+    {
+        $urlMessage = 'https://reddit.com/r/'.env('SUBREDDIT').'/wiki/'.$pageName.'.json';
+
+        return $this->runGet($urlMessage)['data']['content_md'];
+    }
+
+    /**
+     * @param string $pageName
+     * @param string $content
+     */
+    public function editWikiPage(string $pageName, string $content)
+    {
+        $urlMessage = 'https://reddit.com/r/'.env('SUBREDDIT').'/api/wiki/edit';
+
+        $current_revision = $this->wikiGetPageRevisions($pageName, 1);
+        if (isset($current_revision['data']['children'][0])) {
+            $previous = $current_revision['data']['children'][0]['id'];
+        }
+
+        $postData = [
+            'uh'       => $this->modHash,
+            'page'     => $pageName,
+            'content'  => $content,
+            'previous' => $previous,
+            'reason'   => 'test',
+        ];
+
+        $this->runCurl($urlMessage, $postData);
+    }
+
+    /**
+     * @param $pageName
+     * @param int  $limit
+     * @param null $after
+     * @param null $before
+     *
+     * @return mixed
+     */
+    private function wikiGetPageRevisions($pageName, $limit = 25, $after = null, $before = null)
+    {
+        $params = [
+            'after'  => $after,
+            'before' => $before,
+            'limit'  => $limit,
+            'show'   => 'all',
+        ];
+
+        $urlMessage = 'https://reddit.com/r/'.env('SUBREDDIT').'/wiki/revisions/'.$pageName.'.json?'.http_build_query($params);
+
+        return $this->runGet($urlMessage);
     }
 
     /**
@@ -100,7 +216,7 @@ class RedditHelper
 
         $options = [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_COOKIE         => "reddit_session={$this->session}",
+            CURLOPT_COOKIE         => 'reddit_session='.$this->session,
             CURLOPT_TIMEOUT        => 3,
         ];
 
@@ -112,8 +228,14 @@ class RedditHelper
         curl_setopt_array($ch, $options);
 
         $response = json_decode(curl_exec($ch));
+
         curl_close($ch);
 
         return $response;
+    }
+
+    private function runGet(string $url)
+    {
+        return json_decode(file_get_contents($url), true);
     }
 }

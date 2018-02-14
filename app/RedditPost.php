@@ -23,6 +23,13 @@ class RedditPost
     private $type;
     private $post_id;
     private $url;
+    private $helper;
+
+    private $distinguished = false;
+    private $sticky        = false;
+    private $stickySlot    = null;
+    private $contestMode   = false;
+    private $sort          = null;
 
     /**
      * RedditPost constructor.
@@ -33,30 +40,93 @@ class RedditPost
      */
     public function __construct(string $title, string $text, int $type)
     {
-        $this->title = $title;
-        $this->text  = $text;
-        $this->type  = $type;
+        $this->title  = $title;
+        $this->text   = $text;
+        $this->type   = $type;
+        $this->helper = new RedditHelper();
     }
 
     /**
-     * Distinguishes the post if the user has the rights to do so.
+     * Posts the post to reddit.
      *
-     * @param bool $distinguish
+     * @return RedditPost
      */
-    public function post(bool $distinguish = false)
+    public function post(): self
     {
-        $helper   = new RedditHelper();
-        $response = $helper->createStory($this->title, $this->text, env('SUBREDDIT'));
+        $response = $this->helper->createStory($this->title, $this->text, env('SUBREDDIT'));
         $split    = explode('/', str_replace('https://www.reddit.com/r/'.env('SUBREDDIT').'/comments/', '', $response), 2);
 
         $this->post_id = $split[0];
         $this->url     = 'https://www.reddit.com/r/'.env('SUBREDDIT').'/comments/'.$this->post_id;
 
-        if ($distinguish) {
-            $helper->distinguish($this->post_id);
+        $this->save();
+
+        return $this;
+    }
+
+    /**
+     * @return RedditPost
+     */
+    public function distinguish(): self
+    {
+        if (empty($this->post_id)) {
+            return $this;
         }
 
-        $this->save();
+        $this->helper->distinguish($this->post_id);
+        $this->distinguished = true;
+
+        return $this;
+    }
+
+    /**
+     * @param int $slot
+     *
+     * @return RedditPost
+     */
+    public function setSticky(int $slot = 1): self
+    {
+        if (empty($this->post_id)) {
+            return $this;
+        }
+
+        $this->helper->setSticky($this->post_id, $slot);
+        $this->sticky     = true;
+        $this->stickySlot = $slot;
+
+        return $this;
+    }
+
+    /**
+     * @return RedditPost
+     */
+    public function enableContestMode(): self
+    {
+        if (empty($this->post_id)) {
+            return $this;
+        }
+
+        $this->helper->setContestMode($this->post_id);
+        $this->contestMode = true;
+
+        return $this;
+    }
+
+    /**
+     * @param string $sort
+     *
+     * @return RedditPost
+     */
+    public function setSuggestedSort(string $sort): self
+    {
+        if (empty($this->post_id)) {
+            return $this;
+        }
+
+        $this->helper->setSuggestedSort($this->post_id, $sort);
+        $this->sort = $sort;
+
+        return $this;
     }
 
     /**
@@ -76,7 +146,7 @@ class RedditPost
             return;
         }
 
-        SlackNotification::send(ModNotificationBuilder::build($this->title, $this->url), null, env('BOT_MOD_SLACK'));
+        SlackNotification::send(ModNotificationBuilder::build($this), null, env('BOT_MOD_SLACK'));
     }
 
     /**
@@ -108,5 +178,79 @@ class RedditPost
     private function print()
     {
         print_r('Posted and Saved: '.$this->title.PHP_EOL);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText(): string
+    {
+        return $this->text;
+    }
+
+    /**
+     * @return int
+     */
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostId()
+    {
+        return $this->post_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDistinguished(): bool
+    {
+        return $this->distinguished;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSticky(): bool
+    {
+        return $this->sticky;
+    }
+
+    public function getStickySlot()
+    {
+        return $this->stickySlot;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isContestMode(): bool
+    {
+        return $this->contestMode;
+    }
+
+    public function getSort()
+    {
+        return $this->sort;
     }
 }
