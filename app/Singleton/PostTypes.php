@@ -14,9 +14,11 @@ class PostTypes
 {
     const WEEKDAY_POST   = 1;
     const DAILY_SET_POST = 2;
+    const NEWS_POST      = 3;
 
     const WEEKDAY_POST_TEXT   = 'weekday_posts';
     const DAILY_SET_POST_TEXT = 'daily_set_discussion';
+    const NEWS_POST_TEXT      = 'news_posts';
 
     public static function isEnabled(string $postType): bool
     {

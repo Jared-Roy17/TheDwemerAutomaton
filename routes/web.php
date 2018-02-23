@@ -14,3 +14,6 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->post('/incoming/news', 'NewsController@incoming');
+$router->get('/incoming/news', 'NewsController@incoming');

@@ -40,9 +40,9 @@ class ModNotificationBuilder
             $options[] = 'Suggested Sort ('.$post->getSort().')';
         }
 
-        $m = 'Successfully posted <'.$post->getUrl().'|'.$post->getTitle().'> on '.$now->format('F jS Y, H:i').' ('.env('APP_TIMEZONE').').'.PHP_EOL;
+        $m = 'Successfully posted *<'.$post->getUrl().'|'.$post->getTitle().'>* on '.$now->format('F jS Y, H:i').' ('.env('APP_TIMEZONE').').'.PHP_EOL;
         if (count($options) > 0) {
-            $m .= 'ENABLED OPTIONS: '.implode(', ', $options).'.';
+            $m .= '*ENABLED OPTIONS:* '.implode(', ', $options).'.';
         }
 
         return $m;

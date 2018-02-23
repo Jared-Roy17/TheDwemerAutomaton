@@ -34,19 +34,18 @@ class RedditHelper
     }
 
     /**
-     * @param null $title
-     * @param null $text
-     * @param null $subreddit
+     * @param null   $title
+     * @param null   $text
+     * @param null   $subreddit
+     * @param string $kind
      */
-    public function createStory($title = null, $text = null, $subreddit = null)
+    public function createStory($title = null, $text = null, $subreddit = null, $kind = 'self')
     {
         $urlSubmit = $this->apiHost.'/submit';
 
         if (empty($title)) {
             echo 'title empty';
         }
-
-        $kind = 'self';
 
         $postData = [
             'uh'          => $this->modHash,
@@ -59,14 +58,18 @@ class RedditHelper
         ];
 
         //if link was present, add to POST data
-        if (null != $text) {
+        if (null != $text && 'self' === $kind) {
             $postData['text'] = $text;
+        } elseif (null != $text && 'link' === $kind) {
+            $postData['url'] = $text;
         }
 
         $response = $this->runCurl($urlSubmit, $postData);
 
-        if (!empty($response->jquery[10][3][0])) {
+        if ('self' === $kind && !empty($response->jquery[10][3][0])) {
             return $response->jquery[10][3][0];
+        } elseif ('link' === $kind && !empty($response->jquery[16][3][0])) {
+            return $response->jquery[16][3][0];
         }
 
         return null;
@@ -84,7 +87,7 @@ class RedditHelper
         $postData = [
             'uh'       => $this->modHash,
             'api_type' => 'json',
-            'show'     => 'yes',
+            'how'      => 'yes',
             'id'       => 't3_'.$id,
         ];
 

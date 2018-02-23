@@ -44,24 +44,11 @@ class PostDailyThreadsCommand extends Command
         $atTenAm = new DateTime('today 09:00', new DateTimeZone(env('APP_TIMEZONE')));
         $now     = new DateTime('now', new DateTimeZone(env('APP_TIMEZONE')));
 
-        if (($now > $atTenAm)
-            && 'Saturday' !== date('l')
-            && 'Sunday' !== date('l')) {
+        if (($now > $atTenAm) && ('Saturday' !== date('l') || 'Sunday' !== date('l'))) {
             if (PostTypes::isEnabled(PostTypes::DAILY_SET_POST_TEXT)
                 && !PostTypes::hasTodayBeenPosted(PostTypes::DAILY_SET_POST_TEXT)) {
-                $sets_posted = DB::table('sets_done')->get()->all();
-
-                $ids = [];
-
-                /** @var array $sets_posted */
-                foreach ($sets_posted as $set) {
-                    $ids[] = $set->set_id;
-                }
-
-                $new_set = Set::query()->whereNotIn('id', $ids)->orderBy('sort_order', 'asc')->first();
-
-                /** @var Set $new_set */
-                $post = SetPostBuilder::build($new_set);
+                $new_set = $this->getNewSetToPost();
+                $post    = SetPostBuilder::build($new_set);
 
                 $post->post()->distinguish()->setSticky(1);
 
@@ -93,5 +80,41 @@ class PostDailyThreadsCommand extends Command
         }
 
         return true;
+    }
+
+    /**
+     * @return Set
+     */
+    private function getNewSetToPost(): Set
+    {
+        $sets_posted = DB::table('sets_done')->get()->all();
+
+        $ids = [];
+
+        /** @var array $sets_posted */
+        foreach ($sets_posted as $set) {
+            $ids[] = $set->set_id;
+        }
+
+        /** @var Set $new_set */
+        $new_set = Set::query()->whereNotIn('id', $ids)->orderBy('sort_order', 'asc')->first();
+
+        if (null === $new_set) {
+            DB::table('sets_done')->truncate();
+
+            $sets_posted = DB::table('sets_done')->get()->all();
+
+            $ids = [];
+
+            /** @var array $sets_posted */
+            foreach ($sets_posted as $set) {
+                $ids[] = $set->set_id;
+            }
+
+            /** @var Set $new_set */
+            $new_set = Set::query()->whereNotIn('id', $ids)->orderBy('sort_order', 'asc')->first();
+        }
+
+        return $new_set;
     }
 }

@@ -67,6 +67,20 @@ class RedditPost
     /**
      * @return RedditPost
      */
+    public function postUrl(): self
+    {
+        $response = $this->helper->createStory($this->title, $this->text, env('SUBREDDIT'), 'link');
+        $split    = explode('/', str_replace('https://www.reddit.com/r/'.env('SUBREDDIT').'/comments/', '', $response), 2);
+
+        $this->post_id = $split[0];
+        $this->url     = 'https://www.reddit.com/r/'.env('SUBREDDIT').'/comments/'.$this->post_id;
+
+        return $this;
+    }
+
+    /**
+     * @return RedditPost
+     */
     public function distinguish(): self
     {
         if (empty($this->post_id)) {
