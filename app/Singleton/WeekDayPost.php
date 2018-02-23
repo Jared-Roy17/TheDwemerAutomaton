@@ -18,8 +18,8 @@ class WeekDayPost
     ];
 
     const TUESDAY = [
-        'title' => 'Trade Tuesdays - Post your ESO trades here!',
-        'text'  => 'Hey folks,'.PHP_EOL.PHP_EOL.' Welcome to our new recurring post to help you trade items in ESO!'.PHP_EOL.PHP_EOL.' You can post any ingame items you would like to sell, buy or trade, start your comment with WTS / WTB / WTT.'.PHP_EOL.PHP_EOL.' Please do not post trades for out of game items / cash, or anything that may break the ESO Terms of Service.'.PHP_EOL.PHP_EOL.' As always, be polite and respectful, and happy trading!'.self::SIGNATURE,
+        'title' => 'Trendy Tuesday - Post your ESO outfits and homes!',
+        'text'  => 'Hey folks,'.PHP_EOL.PHP_EOL.' Welcome to our new recurring post where you can show off your fashion in ESO!'.PHP_EOL.PHP_EOL.' Feel free to share your outfit or home creations with the rest of the community.'.PHP_EOL.PHP_EOL.' As always, be polite and respectful, may the fashion be with you!'.self::SIGNATURE,
     ];
 
     const WEDNESDAY = [
