@@ -53,7 +53,7 @@ class PostDailyThreadsCommand extends Command
                 $post->post()->distinguish()->setSticky(1);
 
                 if (env('APP_NOTIFICATIONS')) {
-                    //$post->sendToDiscord();
+                    $post->sendToDiscord();
                     $post->notifyModSlack();
                 }
             }
@@ -71,7 +71,7 @@ class PostDailyThreadsCommand extends Command
                 }
 
                 if (env('APP_NOTIFICATIONS')) {
-                    //$post->sendToDiscord();
+                    $post->sendToDiscord();
                     $post->notifyModSlack();
                 }
             }
