@@ -60,6 +60,10 @@ class CheckModMailCommand extends Command
             }
         }
 
+        if (0 !== $last_checked) {
+            DB::table('cron_status')->where('type', '=', 'reddit')->update(['value' => $last_checked]);
+        }
+
         return true;
     }
 }
