@@ -66,8 +66,6 @@ class PostDailyThreadsCommand extends Command
                     $post->post()->distinguish()->enableContestMode()->setSticky(2);
                 } elseif ($post->getTitle() === WeekDayPost::MONDAY['title']) {
                     $post->post()->distinguish()->setSticky(2)->setSuggestedSort('new');
-                } elseif ($post->getTitle() === WeekDayPost::TUESDAY['title']) {
-                    $post->post()->distinguish()->enableContestMode()->setSticky(2);
                 } else {
                     $post->post()->distinguish()->setSticky(2);
                 }
