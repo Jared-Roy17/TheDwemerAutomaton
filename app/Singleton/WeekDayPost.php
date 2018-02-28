@@ -10,7 +10,7 @@ namespace App\Singleton;
 
 class WeekDayPost
 {
-    const SIGNATURE = PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL.'I was programmed to write posts automatically by /u/Woeler. If you have any questions or suggestions about me or my posts, please contact him.';
+    const SIGNATURE = PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL.'I was [programmed](https://github.com/Woeler/TheDwemerAutomaton) to write posts automatically by /u/Woeler. If you have any questions or suggestions about me or my posts, please contact him.';
 
     const MONDAY = [
         'title' => 'Mages Guild Monday - Share Your ESO Knowledge, Ask Questions, Get Info If You\'re New!',
