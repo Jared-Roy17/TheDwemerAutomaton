@@ -44,7 +44,7 @@ class PostDailyThreadsCommand extends Command
         $atTenAm = new DateTime('today 09:00', new DateTimeZone(env('APP_TIMEZONE')));
         $now     = new DateTime('now', new DateTimeZone(env('APP_TIMEZONE')));
 
-        if (($now > $atTenAm) && ('Saturday' !== date('l') || 'Sunday' !== date('l'))) {
+        if (($now > $atTenAm) && 'Saturday' !== date('l') && 'Sunday' !== date('l')) {
             if (PostTypes::isEnabled(PostTypes::DAILY_SET_POST_TEXT)
                 && !PostTypes::hasTodayBeenPosted(PostTypes::DAILY_SET_POST_TEXT)) {
                 $new_set = $this->getNewSetToPost();
