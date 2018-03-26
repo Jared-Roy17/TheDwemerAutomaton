@@ -10,7 +10,7 @@ namespace App\Singleton;
 
 class WeekDayPost
 {
-    const SIGNATURE = PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL.'I was [programmed](https://github.com/Woeler/TheDwemerAutomaton) to write posts automatically by /u/Woeler. If you have any questions or suggestions about me or my posts, please contact him.';
+    const SIGNATURE = PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL.'[I](https://projects.woeler.eu/reddit_autopost/img/dwemer.jpg) was [programmed](https://github.com/Woeler/TheDwemerAutomaton) to write posts automatically by /u/Woeler. If you have any questions or suggestions about me or my posts, please contact him.';
 
     const MONDAY = [
         'title' => 'Mages Guild Monday - Share Your ESO Knowledge, Ask Questions, Get Info If You\'re New!',
@@ -34,6 +34,6 @@ class WeekDayPost
 
     const FRIDAY = [
         'title' => 'Guild Fair Friday - Advertise your guild, Find a guild!',
-        'text'  => 'Hey folks,'.PHP_EOL.PHP_EOL.' Welcome to our new recurring post to help you find a guild on the subreddit!'.PHP_EOL.PHP_EOL.'If you have a guild, you\'re allowed to post ONCE. If you\'re looking for a guild, you can also post. Your post should have - '.PHP_EOL.PHP_EOL.'1) Server (NA or EU), Faction (if applicable), and Type of Guild (Social, PvE, PvP, Hardcore Endgame, Trade, Mixed)'.PHP_EOL.PHP_EOL.' For recruiters, also include '.PHP_EOL.PHP_EOL.'2) Current member numbers '.PHP_EOL.PHP_EOL.'3) Guild recruiting message '.PHP_EOL.PHP_EOL.'4) How to apply'.PHP_EOL.PHP_EOL.' As always, be polite and respectful, and good luck finding a guild!'.self::SIGNATURE,
+        'text'  => 'Hey folks,'.PHP_EOL.PHP_EOL.' Welcome to our new recurring post to help you find a guild on the subreddit!'.PHP_EOL.PHP_EOL.'If you have a guild, you\'re allowed to post ONCE. If you\'re looking for a guild, you can also post. Your post should have - '.PHP_EOL.PHP_EOL.'1) Platform (PC, XBOX or Playstation), Server (NA or EU), Faction (if applicable), and Type of Guild (Social, PvE, PvP, Hardcore Endgame, Trade, Mixed)'.PHP_EOL.PHP_EOL.' For recruiters, also include '.PHP_EOL.PHP_EOL.'2) Current member numbers '.PHP_EOL.PHP_EOL.'3) Guild recruiting message '.PHP_EOL.PHP_EOL.'4) How to apply'.PHP_EOL.PHP_EOL.' As always, be polite and respectful, and good luck finding a guild!'.self::SIGNATURE,
     ];
 }
