@@ -50,6 +50,9 @@ class SetPostBuilder
 
         $text .= '*Obtainable as: '.implode(', ', $types).'*'.PHP_EOL.PHP_EOL;
         $text .= '*Type: '.$set->type.'*'.PHP_EOL.PHP_EOL;
+        if ('Craftable' === $set->type) {
+            $text .= '*Traits needed to craft: '.$set->traits_needed.'*'.PHP_EOL.PHP_EOL;
+        }
 
         if (!empty($set->locationEN)) {
             $text .= '*Location: '.$set->location.'*'.PHP_EOL.PHP_EOL;
