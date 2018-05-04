@@ -95,7 +95,7 @@ class PostDailyThreadsCommand extends Command
         }
 
         /** @var Set $new_set */
-        $new_set = Set::query()->whereNotIn('id', $ids)->orderBy('sort_order', 'asc')->first();
+        $new_set = Set::query()->whereNotIn('id', $ids)->orderBy('order', 'asc')->first();
 
         if (null === $new_set) {
             DB::table('sets_done')->truncate();

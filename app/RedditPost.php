@@ -174,7 +174,7 @@ class RedditPost
                 'post_id' => $this->post_id,
             ]);
         } elseif (PostTypes::DAILY_SET_POST === $this->type) {
-            $set = Set::query()->where('nameEN', '=', str_replace(SetPostBuilder::TITLE_PREFIX, '', $this->title))->first();
+            $set = Set::query()->where('name', '=', str_replace(SetPostBuilder::TITLE_PREFIX, '', $this->title))->first();
 
             DB::table('sets_done')->insert([
                 'date'    => date('Y-m-d'),

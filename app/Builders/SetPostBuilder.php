@@ -26,9 +26,9 @@ class SetPostBuilder
      */
     public static function build(Set $set): RedditPost
     {
-        $title = self::TITLE_PREFIX.$set->nameEN;
+        $title = self::TITLE_PREFIX.$set->name;
 
-        $text = '**'.$set->nameEN.'**'.PHP_EOL.PHP_EOL;
+        $text = '**'.$set->name.'**'.PHP_EOL.PHP_EOL;
 
         $types = [];
 
@@ -52,7 +52,7 @@ class SetPostBuilder
         $text .= '*Type: '.$set->type.'*'.PHP_EOL.PHP_EOL;
 
         if (!empty($set->locationEN)) {
-            $text .= '*Location: '.str_replace(';', ', ', $set->locationEN).'*'.PHP_EOL.PHP_EOL;
+            $text .= '*Location: '.$set->location.'*'.PHP_EOL.PHP_EOL;
         }
 
         $text .= PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL;
@@ -67,7 +67,7 @@ class SetPostBuilder
         $text .= PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL;
         $text .= '*Be sure to think about strengths, weaknesses, counters, and synergies in your discussions. Please vote based on contribution, not opinion.*'.PHP_EOL.PHP_EOL;
         $text .= PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL;
-        $text .= 'Information about this set was provided by [ElderScrollsBote](https://www.elderscrollsbote.de/).'.WeekDayPost::SIGNATURE;
+        $text .= 'Information about this set was provided by [ESO-Sets.com](https://www.eso-sets.com/set/'.$set->slug.').'.WeekDayPost::SIGNATURE;
 
         return new RedditPost($title, $text, PostTypes::DAILY_SET_POST);
     }
