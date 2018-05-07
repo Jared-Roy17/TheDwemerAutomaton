@@ -54,7 +54,7 @@ class SetPostBuilder
             $text .= '*Traits needed to craft: '.$set->traits_needed.'*'.PHP_EOL.PHP_EOL;
         }
 
-        if (!empty($set->locationEN)) {
+        if (!empty($set->location)) {
             $text .= '*Location: '.$set->location.'*'.PHP_EOL.PHP_EOL;
         }
 
