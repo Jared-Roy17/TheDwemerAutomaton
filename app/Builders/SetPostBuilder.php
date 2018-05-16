@@ -70,7 +70,10 @@ class SetPostBuilder
         $text .= PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL;
         $text .= '*Be sure to think about strengths, weaknesses, counters, and synergies in your discussions. Please vote based on contribution, not opinion.*'.PHP_EOL.PHP_EOL;
         $text .= PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL;
-        $text .= 'Information about this set was provided by [ESO-Sets.com](https://www.eso-sets.com/set/'.$set->slug.').'.WeekDayPost::SIGNATURE;
+        $text .= 'Information about this set was provided by [ESO-Sets.com](https://www.eso-sets.com/set/'.$set->slug.').';
+        $text .= PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL;
+        $text .= 'You can find the archive of daily set discussions [here](https://eso-sets.com/reddit/setdiscussion).'
+        .WeekDayPost::SIGNATURE;
 
         return new RedditPost($title, $text, PostTypes::DAILY_SET_POST);
     }
