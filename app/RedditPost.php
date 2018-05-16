@@ -186,6 +186,31 @@ class RedditPost
         $this->print();
     }
 
+    public function sendToEsosets()
+    {
+        if (PostTypes::DAILY_SET_POST === $this->type && !empty($this->post_id)) {
+            $set = Set::query()->where('name', '=', str_replace(SetPostBuilder::TITLE_PREFIX, '', $this->title))->first();
+
+            $data = [
+                'set_id'  => $set->id,
+                'post_id' => $this->post_id,
+                'date'    => date('Y-m-d'),
+            ];
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://eso-sets.com/api/reddit/setdiscussion');
+            $headers = [
+                'Content-Type:application/json',
+                'Authorization: Basic '.base64_encode(env('ESOSETS_API_KEY')), ];
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_exec($ch);
+            curl_close($ch);
+        }
+    }
+
     /**
      * Prints the post to the console.
      */

@@ -55,6 +55,7 @@ class PostDailyThreadsCommand extends Command
                 if (env('APP_NOTIFICATIONS')) {
                     $post->sendToDiscord();
                     $post->notifyModSlack();
+                    $post->sendToEsosets();
                 }
             }
 
