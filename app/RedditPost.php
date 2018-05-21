@@ -197,14 +197,15 @@ class RedditPost
                 'date'    => date('Y-m-d'),
             ];
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'https://eso-sets.com/api/reddit/setdiscussion');
             $headers = [
                 'Content-Type:application/json',
                 'Authorization: Basic '.base64_encode(env('ESOSETS_API_KEY')), ];
+
+            $ch = curl_init('https://eso-sets.com/api/reddit/setdiscussion');
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
             curl_exec($ch);
             curl_close($ch);
