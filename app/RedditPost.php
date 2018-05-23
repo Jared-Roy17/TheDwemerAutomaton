@@ -191,24 +191,19 @@ class RedditPost
         if (PostTypes::DAILY_SET_POST === $this->type && !empty($this->post_id)) {
             $set = Set::query()->where('name', '=', str_replace(SetPostBuilder::TITLE_PREFIX, '', $this->title))->first();
 
-            $data = [
-                'set_id'  => $set->id,
-                'post_id' => $this->post_id,
-                'date'    => date('Y-m-d'),
-            ];
+            if (!empty($set->id)) {
+                $headers = [
+                    'Content-Type:application/json',
+                    'Authorization: Basic '.base64_encode(env('ESOSETS_API_KEY')), ];
 
-            $headers = [
-                'Content-Type:application/json',
-                'Authorization: Basic '.base64_encode(env('ESOSETS_API_KEY')), ];
-
-            $ch = curl_init('https://eso-sets.com/api/reddit/setdiscussion');
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            curl_exec($ch);
-            curl_close($ch);
+                $ch = curl_init('https://eso-sets.com/api/reddit/setdiscussion/'.$set->id.'/'.$this->post_id);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_exec($ch);
+                curl_close($ch);
+            }
         }
     }
 
