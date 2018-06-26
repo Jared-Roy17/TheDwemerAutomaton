@@ -232,7 +232,7 @@ class RedditHelper
 
         $runCurl = curl_exec($ch);
 
-        while (!$runCurl) {
+        while (false === $runCurl) {
             sleep(5);
             $runCurl = curl_exec($ch);
         }
