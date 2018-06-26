@@ -230,7 +230,14 @@ class RedditHelper
 
         curl_setopt_array($ch, $options);
 
-        $response = json_decode(curl_exec($ch));
+        $runCurl = curl_exec($ch);
+
+        while (!$runCurl) {
+            sleep(5);
+            $runCurl = curl_exec($ch);
+        }
+
+        $response = json_decode($runCurl);
 
         curl_close($ch);
 
