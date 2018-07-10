@@ -47,7 +47,7 @@ class FetchSetsCommand extends Command
 
         foreach (json_decode($output, true) as $set_new) {
             $db = Set::query()->find($set_new['id']);
-            if (empty($db)) {
+            if (empty($db) && 0 === $set_new['pts']) {
                 $set                   = new Set();
                 $set->id               = $set_new['id'];
                 $set->name             = $set_new['name'];
@@ -67,7 +67,7 @@ class FetchSetsCommand extends Command
                 $set->traits_needed    = $set_new['traits_needed'];
                 $set->order            = random_int(1, 999999);
                 $set->save();
-            } else {
+            } elseif (0 === $set_new['pts']) {
                 $db->name             = $set_new['name'];
                 $db->location         = $set_new['location'];
                 $db->type             = $set_new['type'];
