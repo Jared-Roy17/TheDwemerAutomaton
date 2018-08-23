@@ -217,6 +217,13 @@ class RedditPost
         }
     }
 
+    public function doCustomRequests(string $channel)
+    {
+        foreach (CustomRequest::all() as $request) {
+            $request->make($this->title, $this->url, $channel);
+        }
+    }
+
     /**
      * Prints the post to the console.
      */
