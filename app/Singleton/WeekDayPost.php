@@ -20,7 +20,7 @@ namespace App\Singleton;
 
 class WeekDayPost
 {
-    const SIGNATURE = PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL.'[I](https://projects.woeler.eu/reddit_autopost/img/dwemer.jpg) was [programmed](https://github.com/Woeler/TheDwemerAutomaton) to write posts automatically by /u/Woeler. If you have any questions or suggestions about me or my posts, please contact him.';
+    const SIGNATURE = PHP_EOL.' &nbsp; '.PHP_EOL.PHP_EOL.'[I](https://projects.woeler.eu/reddit_autopost/img/dwemer.jpg) was [programmed](https://github.com/Woeler/TheDwemerAutomaton) to write posts automatically by /u/Woeler. If you have any questions or suggestions about me or my posts, please contact him. Did you know I am also available as a Discord bot? I can provide all kinds of ESO related information to your Discord server. [Click here](https://discordapp.com/oauth2/authorize?&client_id=481439269479645194&scope=bot&permissions=522304) to add me.';
 
     const MONDAY = [
         'title' => 'Mages Guild Monday - Share Your ESO Knowledge, Ask Questions, Get Info If You\'re New!',
