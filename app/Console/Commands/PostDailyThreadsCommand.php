@@ -64,7 +64,7 @@ class PostDailyThreadsCommand extends Command
 
                 if (env('APP_NOTIFICATIONS')) {
                     $post->sendToDiscord();
-                    $post->doCustomRequests('reddit-daily-discussion');
+                    //$post->doCustomRequests('reddit-daily-discussion');
                     $post->notifyModSlack();
                     $post->sendToEsosets();
                 }
@@ -84,7 +84,7 @@ class PostDailyThreadsCommand extends Command
 
                 if (env('APP_NOTIFICATIONS')) {
                     $post->sendToDiscord();
-                    $post->doCustomRequests('reddit-weekday-post');
+                    //$post->doCustomRequests('reddit-weekday-post');
                     $post->notifyModSlack();
                 }
             }
